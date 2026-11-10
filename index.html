@@ -1,0 +1,487 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#14061f">
+<title>Даше 🤍 Наши 5 месяцев</title>
+<meta property="og:title" content="Даше 🤍">
+<meta property="og:description" content="Наши 5 месяцев. Тапай по экрану)">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤍</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Unbounded:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#fff;--soft:rgba(255,255,255,.72)}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:#0c0512;color:var(--ink);overflow:hidden;
+  font-family:'Manrope',system-ui,sans-serif;-webkit-tap-highlight-color:transparent;
+  user-select:none;-webkit-user-select:none;touch-action:manipulation}
+.stage{position:fixed;inset:0;max-width:520px;margin:0 auto;overflow:hidden;background:#0c0512}
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;
+  padding:calc(64px + env(safe-area-inset-top)) 26px calc(48px + env(safe-area-inset-bottom));
+  background:var(--bg);opacity:0;visibility:hidden;transition:opacity .55s,visibility .55s;overflow:hidden}
+.slide.on{opacity:1;visibility:visible}
+.slide::before,.slide::after{content:'';position:absolute;width:110vmax;height:110vmax;border-radius:50%;
+  pointer-events:none;z-index:0;animation:drift 16s ease-in-out infinite alternate}
+.slide::before{left:-55vmax;top:-60vmax;background:radial-gradient(circle,var(--c1) 0,transparent 62%);opacity:.55}
+.slide::after{right:-60vmax;bottom:-65vmax;background:radial-gradient(circle,var(--c2) 0,transparent 62%);opacity:.5;animation-duration:20s}
+.slide:not(.on)::before,.slide:not(.on)::after{animation-play-state:paused}
+@keyframes drift{to{transform:translate(12vmax,10vmax) scale(1.15)}}
+.slide>*{position:relative;z-index:1}
+
+.a{opacity:0;transform:translateY(22px);transition:opacity .7s cubic-bezier(.2,.8,.2,1),transform .7s cubic-bezier(.2,.8,.2,1)}
+.slide.on .a{opacity:1;transform:none;transition-delay:calc(var(--i,0) * .22s + .15s)}
+
+.kicker{font-family:'Unbounded';font-weight:500;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--soft);margin:0 0 14px}
+h1,h2{font-family:'Unbounded';font-weight:900;margin:0 0 14px;line-height:1.05;letter-spacing:-.02em}
+h1{font-size:clamp(40px,12vw,62px)}
+h2{font-size:clamp(28px,8.4vw,42px)}
+p{font-size:clamp(17px,4.6vw,20px);line-height:1.45;margin:0 0 12px;color:var(--soft)}
+p b{color:#fff}
+.big{font-family:'Unbounded';font-weight:900;font-size:clamp(64px,21vw,120px);line-height:.95;letter-spacing:-.04em;margin:4px 0 6px}
+.mid{font-family:'Unbounded';font-weight:700;font-size:clamp(22px,6.6vw,32px);line-height:1.15;margin:0 0 10px;font-variant-numeric:tabular-nums}
+.tnum{font-variant-numeric:tabular-nums}
+
+.bars{position:fixed;left:0;right:0;max-width:520px;margin:0 auto;top:calc(10px + env(safe-area-inset-top));
+  padding:0 10px;display:flex;gap:3px;z-index:20;pointer-events:none}
+.bar{flex:1;height:3px;border-radius:3px;background:rgba(255,255,255,.28);overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:#fff;transition:width .35s}
+.bar.done i,.bar.cur i{width:100%}
+.hint{position:fixed;left:0;right:0;bottom:calc(18px + env(safe-area-inset-bottom));text-align:center;z-index:20;
+  font-size:13px;color:rgba(255,255,255,.6);letter-spacing:.06em;pointer-events:none;transition:opacity .4s;animation:pulse 1.8s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.35}}
+
+.chat{background:rgba(0,0,0,.25);border-radius:22px;padding:16px;margin:14px 0 18px;backdrop-filter:blur(6px)}
+.chat .who{font-size:13px;color:var(--soft);margin:0 0 8px;font-weight:700}
+.bubble{display:block;width:fit-content;background:#fff;color:#1b0b24;font-weight:700;font-size:20px;padding:12px 16px 12px 16px;
+  border-radius:20px 20px 20px 6px;opacity:0;transform:scale(.6);transform-origin:left bottom}
+.bubble .t{font-size:11px;color:#8a7a90;margin-left:10px;font-weight:500}
+.typing{display:flex;width:fit-content;overflow:hidden;gap:5px;background:rgba(255,255,255,.9);padding:14px 16px;border-radius:20px 20px 20px 6px}
+.typing span{width:8px;height:8px;border-radius:50%;background:#8a7a90;animation:dot 1s infinite}
+.typing span:nth-child(2){animation-delay:.15s}.typing span:nth-child(3){animation-delay:.3s}
+@keyframes dot{50%{transform:translateY(-5px);opacity:.4}}
+.slide.on .typing{animation:gone 0s 2.2s forwards}
+.slide.on .bubble{animation:pop .45s 2.2s cubic-bezier(.3,1.6,.5,1) forwards}
+@keyframes gone{to{height:0;padding:0;opacity:0}}
+@keyframes pop{to{opacity:1;transform:none}}
+.quote{font-family:'Unbounded';font-weight:700;font-size:clamp(19px,5.4vw,24px);color:#fff;line-height:1.3}
+.sign{display:block;font-family:'Manrope';font-weight:500;font-size:15px;color:var(--soft);margin-top:8px}
+
+.tt{border-radius:22px;overflow:hidden;background:#000;margin:12px 0 16px;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+.tt .vid{height:min(34vh,260px);display:flex;align-items:center;justify-content:center;padding:20px;text-align:center;
+  background:linear-gradient(160deg,#25f4ee33,#fe2c5533),#111}
+.tt .vid span{background:#fff;color:#111;font-weight:800;font-size:19px;padding:6px 10px;border-radius:6px;line-height:1.5;
+  box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.tt .cap{padding:12px 16px 16px;font-size:15px;color:#ddd}
+.tt .cap small{display:block;color:#888;font-size:12px;margin-bottom:4px}
+
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:6px}
+.cell{background:rgba(0,0,0,.22);border-radius:20px;padding:18px 16px}
+.cell .n{font-family:'Unbounded';font-weight:900;font-size:clamp(30px,9vw,42px);line-height:1}
+.cell .l{font-size:14px;color:var(--soft);margin-top:6px}
+
+.top{list-style:none;padding:0;margin:8px 0 0}
+.top li{display:flex;gap:16px;align-items:center;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.14)}
+.top .num{font-family:'Unbounded';font-weight:900;font-size:34px;width:34px;flex:none}
+.top .tx{font-weight:800;font-size:19px}
+.top .tx small{display:block;font-weight:500;font-size:14px;color:var(--soft);margin-top:3px}
+
+.meter{margin:12px 0}
+.meter .lab{display:flex;justify-content:space-between;font-weight:700;font-size:16px;margin-bottom:6px}
+.meter .track{height:12px;border-radius:12px;background:rgba(255,255,255,.18);overflow:hidden}
+.meter .fill{height:100%;width:0;border-radius:12px;background:#fff;transition:width 1.4s cubic-bezier(.2,.8,.2,1)}
+.slide.on .meter .fill{width:100%;transition-delay:calc(var(--i,0) * .22s + .4s)}
+
+.vinyl{width:min(56vw,240px);aspect-ratio:1;border-radius:50%;margin:6px auto 22px;
+  background:radial-gradient(circle,#ff6aa8 0 17%,#1a0f1f 17.5% 19%,#111 19.5%),repeating-radial-gradient(circle,#191919 0 2px,#0b0b0b 2px 4px);
+  box-shadow:0 20px 60px rgba(0,0,0,.5);animation:spin 5s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.btn{display:inline-flex;align-items:center;gap:10px;background:#1ed760;color:#06140b;font-weight:800;font-size:16px;
+  padding:14px 22px;border-radius:999px;text-decoration:none;border:0;font-family:inherit;cursor:pointer}
+.btn.w{background:#fff;color:#2a0b2e}
+
+.two{display:grid;gap:12px;margin:10px 0 14px}
+.mode{border-radius:20px;padding:16px 18px;display:flex;gap:14px;align-items:center}
+.mode .e{font-size:40px;flex:none}
+.mode b{display:block;font-size:17px;margin-bottom:2px}
+.mode span{font-size:15px;color:var(--soft)}
+.mode.cute{background:rgba(255,255,255,.92);color:#3a0f3a}
+.mode.cute span{color:#7a4a7a}
+.mode.grim{background:rgba(0,0,0,.35)}
+
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.chip{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.25);border-radius:999px;padding:9px 14px;font-weight:700;font-size:16px}
+
+.cloud{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:baseline;margin-top:8px}
+.cloud span{font-family:'Unbounded';font-weight:700;line-height:1.15}
+
+.lv{font-family:'Unbounded';font-weight:900;font-size:clamp(46px,14vw,74px);margin:6px 0 16px;letter-spacing:-.02em}
+.lv s{text-decoration-thickness:5px;opacity:.55}
+.lv em{font-style:normal;color:#ffe066}
+
+.angry{font-size:84px;display:inline-block}
+.slide.on .angry{animation:stomp .35s 1s 6 ease-in-out}
+@keyframes stomp{25%{transform:translate(-5px,3px) rotate(-6deg)}75%{transform:translate(5px,3px) rotate(6deg)}}
+.uti{display:inline-block;background:#fff;color:#2a0b2e;font-weight:800;font-size:22px;padding:10px 16px;border-radius:20px 20px 6px 20px;margin:4px 0 14px;align-self:flex-end}
+
+.greenwash{position:absolute;inset:0;z-index:0;background:linear-gradient(160deg,#0e5c2f,#1f9c55);transition:opacity 2s 2.6s}
+.slide.on .greenwash{opacity:0}
+.swatch{display:inline-block;width:.9em;height:.9em;border-radius:50%;vertical-align:-.12em;background:#2ecc71;margin-left:6px}
+
+.todo{list-style:none;padding:0;margin:6px 0 0}
+.todo li{display:flex;align-items:center;gap:14px;font-size:19px;font-weight:700;padding:11px 0}
+.todo .box{width:28px;height:28px;border-radius:8px;border:2px solid rgba(255,255,255,.7);flex:none;display:grid;place-items:center;font-size:16px}
+.todo .ok .box{background:#fff;color:#2a0b2e;border-color:#fff}
+.todo small{display:block;font-weight:500;font-size:13px;color:var(--soft)}
+
+.letter{font-size:clamp(16px,4.4vw,19px);line-height:1.55;color:#fff;font-weight:500}
+.letter p{color:#fff;font-size:inherit;margin:0 0 10px}
+
+.heart{position:fixed;z-index:30;pointer-events:none;font-size:26px;animation:fly 1.3s ease-out forwards}
+@keyframes fly{to{transform:translate(var(--dx),-140px) scale(1.4);opacity:0}}
+@media (prefers-reduced-motion:reduce){.slide::before,.slide::after,.vinyl{animation:none}}
+</style>
+</head>
+<body>
+<div class="bars" id="bars"></div>
+<div class="hint" id="hint">тапай по экрану →</div>
+
+<main class="stage" id="stage">
+
+<section class="slide" style="--bg:linear-gradient(165deg,#1d0730,#5d1250);--c1:#ff4fa3;--c2:#7b5cff">
+  <div class="kicker a">Для Даши 🤍</div>
+  <h1 class="a">Наши<br>5 месяцев</h1>
+  <p class="a">Wrapped-edition. Только для одной девочки на всей планете.</p>
+  <p class="a tnum" style="margin-top:22px">вместе уже <b data-live="short">…</b></p>
+</section>
+
+<section class="slide" style="--bg:linear-gradient(165deg,#24103d,#a1306d);--c1:#ff8fb8;--c2:#5b3bff">
+  <div class="kicker a">18 мая · 16:34</div>
+  <h2 class="a">Всё началось с дайвинчика</h2>
+  <p class="a">Ты понравилась мне с первого взгляда на анкету. А я понравился тебе)</p>
+  <div class="chat a">
+    <div class="who">Даша</div>
+    <div class="typing"><span></span><span></span><span></span></div>
+    <div class="bubble">сапчик я с дв<span class="t">16:34</span></div>
+  </div>
+  <div class="quote a" style="--i:4">После этого сообщения моя жизнь изменилась.<span class="sign">— Егор</span></div>
+</section>
+
+<section class="slide" style="--bg:linear-gradient(165deg,#0b0b14,#2b1240);--c1:#fe2c55;--c2:#25f4ee">
+  <div class="kicker a">11 июня</div>
+  <h2 class="a">А потом я наткнулся на твой репост</h2>
+  <div class="tt a">
+    <div class="vid"><span>ай ладно заебал, нравишься ты мне</span></div>
+    <div class="cap"><small>репост · Даша</small>я не настолько смелая, чтобы ему сказать</div>
+  </div>
+  <p class="a">Ты говорила, что друзей-парней у тебя нет. Значит… это про меня? Я начал выяснять.</p>
+</section>
+
+<section class="slide" style="--bg:linear-gradient(165deg,#120a2e,#3a1478);--c1:#9b7bff;--c2:#ff5fa2">
+  <div class="kicker a">11 июня · ночь</div>
+  <p class="a">Это было про меня.</p>
+  <div class="big a">02:43</div>
+  <h2 class="a">ты стала моей девушкой</h2>
+  <p class="a">Самая важная минута этого года.</p>
+</section>
+
+<section class="slide" style="--bg:linear-gradient(165deg,#1a0636,#6b1d8c);--c1:#d16bff;--c2:#ff7a9c">
+  <div class="kicker a">С той самой минуты прошло</div>
+  <div class="big a tnum" data-live="days">…</div>
+  <div class="mid a tnum" data-live="hms">…</div>
+  <p class="a tnum">или <b data-live="months">…</b></p>
+  <p class="a tnum">или <b data-live="secs">…</b> секунд. Смотри, они тикают)</p>
+</section>
+
+<section class="slide" style="--bg:linear-gradient(165deg,#2a0a1e,#b8325c);--c1:#ffb36b;--c2:#ff4f8b">
+  <div class="kicker a">Маленький секрет</div>
+  <h2 class="a" data-live="fiveTitle">Ровно 5 месяцев будет в 02:43</h2>
+  <div class="big a tnum" data-live="fiveCd" style="font-size:clamp(52px,17vw,96px)">…</div>
+  <p class="a" data-live="fiveSub">Полночь это красиво, но наша минута наступит чуть позже.</p>
+</section>
+
+<section class="slide" style="--bg:linear-gradient(165deg,#0a2a24,#16725c);--c1:#4fffc3;--c2:#ffd56b">
+  <div class="kicker a">18 июля · Пикник Парк, Белгород</div>
+  <h2 class="a">Первая встреча</h2>
+  <p class="a"><b>Первые объятия. Первый поцелуй.</b></p>
+  <p class="a">Это было первое свидание в твоей жизни, и я стал первым, кто тебя поцеловал. Я этим очень дорожу 🥹</p>
+</section>
+
+<section class="slide" style="--bg:linear-gradient(165deg,#09203f,#2453c9);--c1:#5fb8ff;--c2:#b06bff">
+  <div class="kicker a">Наши 5 месяцев в цифрах</div>
+  <div class="big a tnum"><span data-count="52000">0</span>+</div>
+  <h2 class="a">сообщений</h2>
+  <p class="a">Это примерно <b data-live="perday">…</b> сообщений в день. Каждый. Божий. День.</p>
+</section>
+
+<section class="slide" style="--bg:linear-gradient(165deg,#2b0b3d,#8a2be2);--c1:#ff6bd6;--c2:#6bd0ff">
+  <div class="kicker a">А ещё</div>
+  <div class="grid">
+    <div class="cell a"><div class="n"><span data-count="100">0</span>+</div><div class="l">встреч</div></div>
+    <div class="cell a"><div class="n"><span data-count="100">0</span>+</div><div class="l">звонков</div></div>
+    <div class="cell a"><div class="n">50–100</div><div class="l">совместных фото</div></div>
+    <div class="cell a"><div class="n">∞</div><div class="l">поцелуев (сбился со счёта)</div></div>
+  </div>
+</section>
+
+<section class="slide" style="--bg:linear-gradient(165deg,#1b0d05,#a8481c);--c1:#ffb35c;--c2:#ff5f7e">
+  <div class="kicker a">Твой топ моментов</div>
+  <h2 class="a">Топ-4 за 5 месяцев</h2>
+  <ol class="top">
+    <li class="a"><span class="num">1</span><span class="tx">Первая прогулка вместе</span></li>
+    <li class="a"><span class="num">2</span><span class="tx">Первый поцелуй<small>твой первый в жизни 🤍</small></span></li>
+    <li class="a"><span class="num">3</span><span class="tx">Первый раз у тебя дома</span></li>
+    <li class="a"><span class="num">4</span><span class="tx">Первый раз у меня дома</span></li>
+  </ol>
+</section>
+
+<section class="slide" style="--bg:linear-gradient(165deg,#300a24,#d1427a);--c1:#ffd1e3;--c2:#ff7a59">
+  <div class="kicker a">Чем мы занимаемся больше всего</div>
+  <div class="meter a"><div class="lab"><span>Целуемся</span><span>100%</span></div><div class="track"><div class="fill"></div></div></div>
+  <div class="meter a"><div class="lab"><span>Обнимаемся</span><span>100%</span></div><div class="track"><div class="fill"></div></div></div>
+  <div class="meter a"><div class="lab"><span>Болтаем</span><span>100%</span></div><div class="track"><div class="fill"></div></div></div>
+  <div class="meter a"><div class="lab"><span>Тиктоки и ютуб</span><span>100%</span></div><div class="track"><div class="fill"></div></div></div>
+  <div class="meter a"><div class="lab"><span>Гуляем</span><span>100%</span></div><div class="track"><div class="fill"></div></div></div>
+  <p class="a" style="margin-top:10px">Статистика не врёт: с тобой всё на максимум.</p>
+</section>
+
+<section class="slide" style="--bg:linear-gradient(165deg,#07170d,#146b3a);--c1:#1ed760;--c2:#ff6aa8">
+  <div class="kicker a" style="text-align:center">Песня наших 5 месяцев</div>
+  <div class="vinyl a"></div>
+  <h2 class="a" style="text-align:center;margin-bottom:4px">ток</h2>
+  <p class="a" style="text-align:center"><b>zhanulka</b></p>
+  <p class="a" style="text-align:center">Твоя любимая песня и первая, которую я добавил в любимые в Spotify.</p>
+  <div class="a" style="text-align:center;margin-top:6px">
+    <a class="btn" href="https://open.spotify.com/search/zhanulka%20%D1%82%D0%BE%D0%BA" target="_blank" rel="noopener">▶ Включить</a>
+  </div>
+</section>
+
+<section class="slide" style="--bg:linear-gradient(165deg,#1a1030,#5c3d99);--c1:#ffc2e0;--c2:#5b8cff">
+  <div class="kicker a">Факт, который знаешь только ты</div>
+  <h2 class="a">У меня два голоса</h2>
+  <div class="two">
+    <div class="mode cute a"><div class="e">🥺</div><div><b>Когда я с тобой</b><span>миленький голосок, веду себя как ребёнок</span></div></div>
+    <div class="mode grim a"><div class="e">😐</div><div><b>Кто-то зашёл или позвонил</b><span>грубый голос, серьёзный Егор</span></div></div>
+  </div>
+  <p class="a">Тот, первый, только для тебя.</p>
+</section>
+
+<section class="slide" style="--bg:linear-gradient(165deg,#2a0618,#c2185b);--c1:#ff9ec7;--c2:#ffcc70">
+  <div class="kicker a">Ты для меня</div>
+  <div class="cloud">
+    <span class="a" style="font-size:44px">Кися</span>
+    <span class="a" style="font-size:24px">киса</span>
+    <span class="a" style="font-size:32px">звёздочка</span>
+    <span class="a" style="font-size:22px">кошечка</span>
+    <span class="a" style="font-size:36px">малышка</span>
+    <span class="a" style="font-size:24px">зайка</span>
+    <span class="a" style="font-size:28px">булочка</span>
+    <span class="a" style="font-size:22px">буся</span>
+    <span class="a" style="font-size:34px">принцесса</span>
+    <span class="a" style="font-size:22px">милашка</span>
+    <span class="a" style="font-size:30px">любимка</span>
+    <span class="a" style="font-size:26px">харошенькая девочка</span>
+  </div>
+</section>
+
+<section class="slide" style="--bg:linear-gradient(165deg,#200b33,#7b2fa8);--c1:#ff7ad9;--c2:#7ad7ff">
+  <div class="kicker a">За что я тебя люблю</div>
+  <h2 class="a">Список длинный, вот начало</h2>
+  <div class="chips">
+    <span class="chip a">тактильность</span>
+    <span class="chip a">доброта</span>
+    <span class="chip a">понимание</span>
+    <span class="chip a">твоё милое поведение</span>
+    <span class="chip a">как мило ты меня называешь</span>
+    <span class="chip a">твоя любовь ко мне</span>
+    <span class="chip a">твои оговорки</span>
+    <span class="chip a">твоя мимика</span>
+    <span class="chip a">и вообще всё, что ты делаешь</span>
+  </div>
+</section>
+
+<section class="slide" style="--bg:linear-gradient(165deg,#2b1a05,#c77d12);--c1:#ffe066;--c2:#ff6b8b">
+  <div class="kicker a">Отдельно обожаю</div>
+  <div class="lv a"><s>Л</s>→<em>В</em></div>
+  <p class="a">Когда ты иногда не выговариваешь «л», и вместо неё получается «в».</p>
+  <p class="a">Так что ты у меня не просто любимка. Ты <b>вюбимка</b> 🤍</p>
+</section>
+
+<section class="slide" style="--bg:linear-gradient(165deg,#2e0710,#b3243b);--c1:#ff8a65;--c2:#ff4f8b">
+  <div class="kicker a">Режим «злюка»</div>
+  <div class="a"><span class="angry">😤</span></div>
+  <p class="a">Ты топаешь ножкой или бьёшь рукой по кровати…</p>
+  <div class="uti a">ути какая)</div>
+  <p class="a">…и ты злишься ещё сильнее. Но уже милее и с улыбкой.</p>
+  <h2 class="a" style="margin-top:6px">Обожаю.</h2>
+</section>
+
+<section class="slide" style="--bg:linear-gradient(165deg,#1d0b2b,#a3366b);--c1:#ffb0d0;--c2:#8f7bff">
+  <div class="greenwash"></div>
+  <div class="kicker a">Мой любимый цвет</div>
+  <p class="a" style="color:#fff">До того, как я тебя встретил, я думал, что мой любимый цвет — зелёный<span class="swatch"></span></p>
+  <p class="quote a" style="--i:3">Но оказалось, что мой самый-самый любимый цвет — это цвет моих глаз, которые я вижу в отражении твоих)</p>
+</section>
+
+<section class="slide" style="--bg:linear-gradient(165deg,#0d1a33,#3b5bdb);--c1:#ffd6f0;--c2:#6bffd8">
+  <div class="kicker a">Что дальше</div>
+  <h2 class="a">Наш план</h2>
+  <ul class="todo">
+    <li class="a"><span class="box"></span>Съехаться</li>
+    <li class="a"><span class="box"></span>Пожениться</li>
+    <li class="a"><span class="box"></span>Завести котёнка 🐱</li>
+    <li class="a ok"><span class="box">✓</span><span>Всегда-всегда быть рядом<small>уже выполняется</small></span></li>
+  </ul>
+</section>
+
+<section class="slide" style="--bg:linear-gradient(165deg,#1a0620,#5a1440);--c1:#ff6aa8;--c2:#ffb36b">
+  <div class="kicker a">И самое главное</div>
+  <div class="letter">
+    <p class="a">Спустя столько времени, проведённого с тобой, я ни разу не усомнился в том, что сделал правильный выбор)</p>
+    <p class="a">Просыпаясь утром нового дня, я понимаю, что люблю тебя ещё сильнее, чем вчера, и так продолжается все 5 месяцев.</p>
+    <p class="a">И даже если мне плохо, трудно и так далее, я всегда чувствую облегчение на душе, когда вспоминаю, что ты моя девушка)</p>
+    <p class="a"><b>Люблю тебя, звёздочка))</b></p>
+  </div>
+  <span class="sign a">Твой Егор — самый любимый и самый любящий, заботливый, добрый, милый парень 🤍</span>
+</section>
+
+<section class="slide" style="--bg:linear-gradient(165deg,#2a0524,#e0457b);--c1:#ffd1e3;--c2:#ff9a5c">
+  <div class="kicker a">5 месяцев</div>
+  <h1 class="a">Люблю тебя, Даша</h1>
+  <p class="a tnum">и это уже <b data-live="short">…</b></p>
+  <p class="a">И это только начало 🤍</p>
+  <div class="a" style="margin-top:14px"><button class="btn w" id="again">↺ Посмотреть ещё раз</button></div>
+</section>
+
+</main>
+
+<script>
+// 11 июня 02:43 по МСК. МСК без перехода на летнее время, поэтому смещение +3 постоянное
+const START = Date.UTC(2026, 5, 10, 23, 43, 0);
+const FIVE = Date.UTC(2026, 10, 10, 23, 43, 0);
+
+const slides = [...document.querySelectorAll('.slide')];
+const barsEl = document.getElementById('bars');
+const hint = document.getElementById('hint');
+let cur = 0;
+
+slides.forEach(s => {
+  s.querySelectorAll('.a').forEach((el, i) => { if (!el.style.getPropertyValue('--i')) el.style.setProperty('--i', i); });
+  const b = document.createElement('div'); b.className = 'bar'; b.innerHTML = '<i></i>'; barsEl.appendChild(b);
+});
+const bars = [...barsEl.children];
+
+function plural(n, f) {
+  const a = Math.abs(n) % 100, b = a % 10;
+  if (a > 10 && a < 20) return f[2];
+  if (b > 1 && b < 5) return f[1];
+  if (b === 1) return f[0];
+  return f[2];
+}
+const D = ['день', 'дня', 'дней'], H = ['час', 'часа', 'часов'], M = ['минута', 'минуты', 'минут'],
+      S = ['секунда', 'секунды', 'секунд'], MO = ['месяц', 'месяца', 'месяцев'];
+const pad = n => String(n).padStart(2, '0');
+const fmt = n => n.toLocaleString('ru-RU');
+
+function addMonths(ts, k) { const d = new Date(ts); d.setUTCMonth(d.getUTCMonth() + k); return d.getTime(); }
+
+function tick() {
+  const now = Date.now();
+  const ms = Math.max(0, now - START);
+  const days = Math.floor(ms / 864e5);
+  const h = Math.floor(ms / 36e5) % 24, m = Math.floor(ms / 6e4) % 60, s = Math.floor(ms / 1e3) % 60;
+
+  let mo = 0;
+  while (addMonths(START, mo + 1) <= now) mo++;
+  const rest = now - addMonths(START, mo);
+  const rd = Math.floor(rest / 864e5);
+
+  const v = {
+    days: `${days} ${plural(days, D)}`,
+    hms: `${h} ${plural(h, H)} ${pad(m)} мин ${pad(s)} сек`,
+    months: `${mo} ${plural(mo, MO)} ${rd} ${plural(rd, D)} ${pad(h)}:${pad(m)}:${pad(s)}`,
+    secs: fmt(Math.floor(ms / 1e3)),
+    short: `${days} ${plural(days, D)} ${pad(h)}:${pad(m)}:${pad(s)}`,
+    perday: fmt(Math.round(52000 / Math.max(1, (now - Date.UTC(2026, 4, 18, 13, 34)) / 864e5)))
+  };
+
+  const left = FIVE - now;
+  if (left > 0) {
+    const lh = Math.floor(left / 36e5), lm = Math.floor(left / 6e4) % 60, ls = Math.floor(left / 1e3) % 60;
+    v.fiveTitle = 'Ровно 5 месяцев будет в 02:43. Осталось';
+    v.fiveCd = `${pad(lh)}:${pad(lm)}:${pad(ls)}`;
+    v.fiveSub = 'Полночь это красиво, но наша минута наступит чуть позже.';
+  } else {
+    v.fiveTitle = 'Ровно 5 месяцев исполнилось 11 ноября в';
+    v.fiveCd = '02:43';
+    v.fiveSub = 'Нашу минуту я встретил, думая о тебе 🤍';
+  }
+
+  document.querySelectorAll('[data-live]').forEach(el => {
+    const t = v[el.dataset.live];
+    if (t !== undefined && el.textContent !== t) el.textContent = t;
+  });
+}
+tick();
+setInterval(tick, 250);
+
+function countUp(slide) {
+  slide.querySelectorAll('[data-count]').forEach(el => {
+    const to = +el.dataset.count, t0 = performance.now(), dur = 1600;
+    const step = t => {
+      const k = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - k, 3);
+      el.textContent = fmt(Math.round(to * e));
+      if (k < 1) requestAnimationFrame(step);
+    };
+    el.textContent = '0';
+    setTimeout(() => requestAnimationFrame(step), 500);
+  });
+}
+
+function go(i) {
+  i = Math.max(0, Math.min(slides.length - 1, i));
+  slides[cur].classList.remove('on');
+  cur = i;
+  // пересоздаём класс через кадр, иначе при возврате на тот же слайд анимации не перезапускаются
+  requestAnimationFrame(() => {
+    slides[cur].classList.add('on');
+    countUp(slides[cur]);
+  });
+  bars.forEach((b, k) => { b.classList.toggle('done', k < cur); b.classList.toggle('cur', k === cur); });
+  hint.style.opacity = cur < 2 ? 1 : 0;
+}
+
+function heart(x, y) {
+  const h = document.createElement('span');
+  h.className = 'heart';
+  h.textContent = ['🤍', '💗', '💕', '💖'][Math.floor(Math.random() * 4)];
+  h.style.left = (x - 13) + 'px'; h.style.top = (y - 13) + 'px';
+  h.style.setProperty('--dx', (Math.random() * 60 - 30) + 'px');
+  document.body.appendChild(h);
+  setTimeout(() => h.remove(), 1300);
+}
+
+let sx = 0, sy = 0, swiped = false;
+document.addEventListener('touchstart', e => { sx = e.touches[0].clientX; sy = e.touches[0].clientY; swiped = false; }, { passive: true });
+document.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy;
+  if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) { swiped = true; go(cur + (dx < 0 ? 1 : -1)); }
+}, { passive: true });
+
+document.addEventListener('click', e => {
+  if (e.target.closest('a,button')) return;
+  if (swiped) { swiped = false; return; }
+  heart(e.clientX, e.clientY);
+  go(cur + (e.clientX < window.innerWidth * 0.3 ? -1 : 1));
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === ' ') go(cur + 1);
+  if (e.key === 'ArrowLeft') go(cur - 1);
+});
+document.getElementById('again').addEventListener('click', () => go(0));
+
+go(0);
+</script>
+</body>
+</html>
