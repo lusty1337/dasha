@@ -188,7 +188,7 @@ p b{color:#fff}
 
 <section class="slide" style="--bg:linear-gradient(165deg,#1a0636,#6b1d8c);--c1:#d16bff;--c2:#ff7a9c">
   <div class="kicker a">С той самой минуты прошло</div>
-  <div class="big a tnum" data-live="days">…</div>
+  <div class="big a tnum" data-live="days" style="font-size:clamp(50px,15vw,92px)">…</div>
   <div class="mid a tnum" data-live="hms">…</div>
   <p class="a tnum">или <b data-live="months">…</b></p>
   <p class="a tnum">или <b data-live="secs">…</b> секунд. Смотри, они тикают)</p>
@@ -210,7 +210,7 @@ p b{color:#fff}
 
 <section class="slide" style="--bg:linear-gradient(165deg,#09203f,#2453c9);--c1:#5fb8ff;--c2:#b06bff">
   <div class="kicker a">Наши 5 месяцев в цифрах</div>
-  <div class="big a tnum"><span data-count="52000">0</span>+</div>
+  <div class="big a tnum" style="font-size:clamp(46px,14.5vw,84px)"><span data-count="52000">0</span>+</div>
   <h2 class="a">сообщений</h2>
   <p class="a">Это примерно <b data-live="perday">…</b> сообщений в день. Каждый. Божий. День.</p>
 </section>
@@ -449,7 +449,8 @@ function go(i) {
     countUp(slides[cur]);
   });
   bars.forEach((b, k) => { b.classList.toggle('done', k < cur); b.classList.toggle('cur', k === cur); });
-  hint.style.opacity = cur < 2 ? 1 : 0;
+  // через visibility: opacity перебивает анимация пульсации
+  hint.style.visibility = cur < 2 ? 'visible' : 'hidden';
 }
 
 function heart(x, y) {
